@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
+void get_input(int *size_population, int *bits, int *epochs);
 int **set(int **population, int size_population, int bits);
 int *value(int **population, int *value_vector, int size_population, int bits);
 float *fitness(int *value_vector, float *fitness_vector, int size_population);
@@ -13,16 +14,9 @@ int main()
 {
 	int **population, *value_vector, size_population, bits, i, j, epochs;
 	float *fitness_vector;
-	 
-	// input
-	printf("type the size of population: "); 
-	scanf("%d", &size_population);
-	printf("type the number of bits: ");
-	scanf("%d", &bits);
-	printf("type the number of epochs: ");
-	scanf("%d", &epochs);
-
-	population = set(population, size_population, bits); 
+	
+	get_input(&size_population, &bits, &epochs); // get values 
+	population = set(population, size_population, bits); // create population
 	for(i = 0; i < epochs; i++)
 	{
 		value_vector = value(population, value_vector, size_population, bits); 
@@ -39,6 +33,17 @@ int main()
 		printf("\n");	
 	}	
 }
+
+void get_input(int *size_population, int *bits, int *epochs)
+{
+	printf("type the size of population: "); 
+	scanf("%d", size_population);
+	printf("type the number of bits: ");
+	scanf("%d", bits);
+	printf("type the number of epochs: ");
+	scanf("%d", epochs);
+}
+
 
 int **set(int **population, int size_population, int bits)
 {
