@@ -2,29 +2,35 @@
 #include <stdlib.h>
 #include <math.h>
 
-void inputs(int *n, float *step, float *y);
+void inputs(int *n, float *step, float *y, int *epochs, float *e);
 float *weight(int n, float *W);
 float *inputs_X(int n, float *X);
 float function(float x);
-//float update_weight(
+float forward(int n, float *W, float *X);
+float get_error(float y, float x);
+float *update_weight(int n, float step, float error, float *W, float *X);
 
 int main()
 {
-	int n, i, epochs; 
-	float *W, *X, step, y, e;
+	int n, i, epochs, count = 0; 
+	float *W, *X, step, y, e, result, error;
 
 	inputs(&n, &step, &y, &epochs, &e);
 	W = weight(n, W);
 	X = inputs_X(n, X);
-
-	printf("y = %f\n", y);
-	for(i = 0; i < n; i++)
-		printf("X[%d] = %f\n", i, X[i]);
-	for(i = 0; i <= n; i++)
-		printf("W[%d] = %f\n", i, W[i]);
+	result = forward(n, W, X);
+	error = get_error(y, result);
+	while(error > e && count < epochs)
+	{
+		count++;
+		W = update_weight(n, step, error, W, X);
+		result = forward(n, W, X);
+		error = get_error(y, result);
+	}	
+	printf("result = %f\n", result);
 }
 
-void inputs(int *n, float *step, float *y)
+void inputs(int *n, float *step, float *y, int *epochs, float *e)
 {
 	printf("type the number of inputs: ");
 	scanf("%d", n);
@@ -33,7 +39,7 @@ void inputs(int *n, float *step, float *y)
 	printf("type the expected value: ");
 	scanf("%f", y);
 	printf("type the number of epochs: ");
-	scanf("%f", epochs);
+	scanf("%d", epochs);
 	printf("type the minimum error: ");
 	scanf("%f", e);
 }
@@ -41,9 +47,11 @@ void inputs(int *n, float *step, float *y)
 float *weight(int n, float *W)
 {
 	int i;
+	clock_t t;
+	srand(t);
 	W = malloc((n + 1)*sizeof(float));
 	for(i = 0; i <= n; i++)
-		W[i] = 0.5;	
+		W[i] = rand()%11/10.0;	
 	return W;
 }
 
@@ -80,22 +88,15 @@ float forward(int n, float *W, float *X)
 	return result;
 }
 
-float *update_weight(int n, float step, int epochs, float e, float *W, float *X)
-{	
-	int i;
-	static int count = 0;
-	float result = forward(n, W, X);
-	float error = fabs(result - y);
-	if(error > e && count < epochs)
-	{
-		count++;
-		for(i = 0; i <= n; i++)
-			W[i] = W[i] + step*error*X[i];
-	}
-	return W;
+float get_error(float y, float x)
+{
+	return fabs(x - y);
 }
 
-
-
-
-
+float *update_weight(int n, float step, float error, float *W, float *X)
+{	
+	int i;
+	for(i = 0; i <= n; i++)
+		W[i] = W[i] + step*error*X[i];
+	return W;
+}
