@@ -9,13 +9,21 @@ TEMPLATE = app
 SOURCES += main.cpp\
         game.cpp \
     board.cpp \
-    minmax.cpp
+    minmax.cpp \
+    menu.cpp \
+    inicia.cpp
 
 HEADERS  += game.h \
     ai.h \
     board.h \
     globals.h \
-    minmax.h
+    minmax.h \
+    menu.h \
+    inicia.h
 
 RESOURCES += \
     resource.qrc
+
+FORMS += \
+    menu.ui \
+    inicia.ui

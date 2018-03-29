@@ -1,3 +1,4 @@
+#include "menu.h"
 #include "game.h"
 #include "globals.h"
 #include <QApplication>
@@ -10,9 +11,9 @@ Ai ai;
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
-    Game game;
+    menu men;
 
-    game.show();
+    men.show();
 
     return app.exec();
 }
