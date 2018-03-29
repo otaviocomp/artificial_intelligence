@@ -1,16 +1,22 @@
-#ifndef GLOBALS
-#define GLOBALS
+#pragma once
 
-// declaring global variables
-static GtkButton *statusClick,*diffClick,*gameClick;
-static GtkButton *button[3][3]={{NULL,NULL,NULL},{NULL,NULL,NULL},{NULL,NULL,NULL}};
+enum GameState {WIN = 6, LOSE = -6, TIE = 0, PLAY = 1, END = -1};
+enum {X = 1, O = -1, EMPTY = 0 };
 
-// declaring global flags
-static int flag=0, gameNotOver=1, initialise=0, statusFlag=0, pressed[3][3]={{0,0,0},{0,0,0},{0,0,0}};
-static int moveCounter=0;
+struct Move{
+    int score;
+    int location;
 
-// declaring game parameters
-static int arr[3][3]={{0,0,0},{0,0,0},{0,0,0}};
-static int gameType=0, gameDifficulty=1;
+    Move(){}
+    Move(int s) : score(s) {}
+};
 
-#endif
+struct CurrentPly{
+    int player;
+    CurrentPly() : player(X) {}
+    inline void Toggle(){
+        player *= -1;
+    }
+};
+extern int displayBoard[9];
+extern CurrentPly currentPly;
