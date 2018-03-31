@@ -1,4 +1,6 @@
-#pragma once
+#ifndef BOARD_H
+#define BOARD_H
+
 #include "globals.h"
 
 class Board{
@@ -12,3 +14,5 @@ public:
 };
 
 extern Board board;
+
+#endif

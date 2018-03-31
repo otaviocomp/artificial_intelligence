@@ -1,5 +1,5 @@
-#pragma once
-
+#ifndef MINMAX_H
+#define MINMAX_H
 
 #include "globals.h"
 
@@ -13,3 +13,5 @@ public:
 };
 
 extern Ai ai;
+
+#endif

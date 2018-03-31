@@ -1,4 +1,5 @@
-#pragma once
+#ifndef GLOBALS_H
+#define GLOBALS_H
 
 enum GameState {WIN = 6, LOSE = -6, TIE = 0, PLAY = 1, END = -1};
 enum {X = 1, O = -1, EMPTY = 0 };
@@ -14,9 +15,9 @@ struct Move{
 struct CurrentPly{
     int player;
     CurrentPly() : player(X) {}
-    inline void Toggle(){
-        player *= -1;
-    }
+    inline void Toggle(){player *= -1;}
 };
 extern int displayBoard[9];
 extern CurrentPly currentPly;
+
+#endif
