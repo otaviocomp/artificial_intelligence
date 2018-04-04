@@ -1,6 +1,7 @@
 #include "minmax.h"
 #include "board.h"
 #include "globals.h"
+#include <iostream>
 
 Move Ai::Search(int player){
     switch(board.Evaluate(player)){
@@ -12,7 +13,7 @@ Move Ai::Search(int player){
             return TIE_SCORE;
     }
     Move bestMove;
-    bestMove.score = -INF;
+    bestMove.score = -INF; //begin with a very low value
     for(int i = 0; i < 9; i++){
         if(board.GetSquare(i) == EMPTY){
             Move move;
@@ -20,6 +21,7 @@ Move Ai::Search(int player){
             board.SetSquare(i, player);
             move.score = -Search(-player).score;
             board.UnsetSquare(i);
+            // att the score
             if(move.score > bestMove.score)
                 bestMove = move;
         }
