@@ -4,6 +4,8 @@
 #include <QWidget>
 #include "inicia.h"
 
+extern bool easy;
+
 namespace Ui {
 class menu;
 }
@@ -18,6 +20,8 @@ public:
 
 private slots:
     void on_dificil_clicked();
+
+    void on_facil_clicked();
 
 private:
     Ui::menu *ui;

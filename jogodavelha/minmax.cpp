@@ -1,6 +1,7 @@
 #include "minmax.h"
 #include "board.h"
 #include "globals.h"
+#include "menu.h"
 #include <iostream>
 
 Move Ai::Search(int player){
@@ -12,7 +13,6 @@ Move Ai::Search(int player){
         case TIE:
             return TIE_SCORE;
     }
-    bool easy=0;
     if(easy==1){
         Move bestMove;
         if(player==-1){

@@ -19,3 +19,10 @@ void menu::on_dificil_clicked()
     ini.show();
     this->hide();
 }
+
+void menu::on_facil_clicked()
+{
+    ini.show();
+    this->hide();
+    easy=1;
+}
