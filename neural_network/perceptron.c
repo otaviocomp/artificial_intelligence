@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <math.h>
 
 void inputs(int *n, float *step, float *y, int *epochs, float *e);
@@ -10,28 +11,24 @@ float forward(int n, float *W, float *X);
 float get_error(float y, float x);
 float *update_weight(int n, float step, float error, float *W, float *X);
 
-int main()
-{
-	int n, i, epochs, count = 0; 
-	float *W, *X, step, y, e, result, error;
-
-	inputs(&n, &step, &y, &epochs, &e);
+int main(){
+	int n, i, epochs, count = 0, result; 
+	float *W, *X, step, y, e, error;
+	inputs(&n, &step, &y, &epochs, &e);	
 	W = weight(n, W);
 	X = inputs_X(n, X);
 	result = forward(n, W, X);
 	error = get_error(y, result);
-	while(error > e && count < epochs)
-	{
+	while(error > e && count < epochs){
 		count++;
 		W = update_weight(n, step, error, W, X);
-		result = forward(n, W, X);
+		result = (int)forward(n, W, X);
 		error = get_error(y, result);
 	}	
 	printf("result = %f\n", result);
 }
 
-void inputs(int *n, float *step, float *y, int *epochs, float *e)
-{
+void inputs(int *n, float *step, float *y, int *epochs, float *e){
 	printf("type the number of inputs: ");
 	scanf("%d", n);
 	printf("type the value of the step: ");
@@ -44,8 +41,7 @@ void inputs(int *n, float *step, float *y, int *epochs, float *e)
 	scanf("%f", e);
 }
 
-float *weight(int n, float *W)
-{
+float *weight(int n, float *W){
 	int i;
 	clock_t t;
 	srand(t);
@@ -55,31 +51,25 @@ float *weight(int n, float *W)
 	return W;
 }
 
-float *inputs_X(int n, float *X)
-{
+float *inputs_X(int n, float *X){
 	int i;
 	X = malloc(n*sizeof(float));
 	X[0] = -1;
 	printf("type the values of the inputs: \n");
-	for(i = 1; i <= n; i++)
-	{
+	for(i = 1; i <= n; i++){
 		printf("X[%d] = ", i);
 		scanf("%f", &X[i]);
 	}
 	return X;
 }
 
-float function(float x)
-{
-	// step function
-	if(x >= 0)
-		return 1;
-	else 
-		return 0;
+//step function
+float function(float x){
+	if(x >= 0) return 1;
+	else return 0;
 }
 
-float forward(int n, float *W, float *X)
-{
+float forward(int n, float *W, float *X){
 	int i;
 	float result = 0.0;
 	for(i = 0; i <= n; i++)
@@ -88,13 +78,11 @@ float forward(int n, float *W, float *X)
 	return result;
 }
 
-float get_error(float y, float x)
-{
+float get_error(float y, float x){
 	return fabs(x - y);
 }
 
-float *update_weight(int n, float step, float error, float *W, float *X)
-{	
+float *update_weight(int n, float step, float error, float *W, float *X){	
 	int i;
 	for(i = 0; i <= n; i++)
 		W[i] = W[i] + step*error*X[i];
