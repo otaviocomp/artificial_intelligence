@@ -12,9 +12,9 @@ float get_error(float y, float x);
 float *update_weight(int n, float step, float error, float *W, float *X);
 
 int main(){
-	int n, i, epochs, count = 0, result; 
-	float *W, *X, step, y, e, error;
-	inputs(&n, &step, &y, &epochs, &e);	
+	int n, i, epochs, count = 0; 
+	float *W, *X, step, y, e, result, error;
+	inputs(&n, &step, &y, &epochs, &e);
 	W = weight(n, W);
 	X = inputs_X(n, X);
 	result = forward(n, W, X);
@@ -22,7 +22,7 @@ int main(){
 	while(error > e && count < epochs){
 		count++;
 		W = update_weight(n, step, error, W, X);
-		result = (int)forward(n, W, X);
+		result = forward(n, W, X);
 		error = get_error(y, result);
 	}	
 	printf("result = %f\n", result);
