@@ -1,90 +1,56 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <math.h>
-
-void inputs(int *n, float *step, float *y, int *epochs, float *e);
-float *weight(int n, float *W);
-float *inputs_X(int n, float *X);
-float function(float x);
-float forward(int n, float *W, float *X);
-float get_error(float y, float x);
-float *update_weight(int n, float step, float error, float *W, float *X);
 
 int main(){
-	int n, i, epochs, count = 0; 
-	float *W, *X, step, y, e, result, error;
-	inputs(&n, &step, &y, &epochs, &e);
-	W = weight(n, W);
-	X = inputs_X(n, X);
-	result = forward(n, W, X);
-	error = get_error(y, result);
-	while(error > e && count < epochs){
-		count++;
-		W = update_weight(n, step, error, W, X);
-		result = forward(n, W, X);
-		error = get_error(y, result);
-	}	
-	printf("result = %f\n", result);
-}
+	float soma, pesos[3] = {0,0,0};
+	int erro, i, j, input1, input2, epocas, resposta;
+	const int dados[4][3] = {{0,0,0},{0,1,0},{1,0,0},{1,1,1}};
+	
+	//epocas
+	fputs("epocas: ", stdout);
+	scanf("%d", &epocas);
 
-void inputs(int *n, float *step, float *y, int *epochs, float *e){
-	printf("type the number of inputs: ");
-	scanf("%d", n);
-	printf("type the value of the step: ");
-	scanf("%f", step);
-	printf("type the expected value: ");
-	scanf("%f", y);
-	printf("type the number of epochs: ");
-	scanf("%d", epochs);
-	printf("type the minimum error: ");
-	scanf("%f", e);
-}
+	//treinamento
+	for(i = epocas; i--;)
+		for(j = 4; j--;){
+			//soma pesos sinapticos e inputs
+			soma = 0;
+			soma = -1*pesos[0] + dados[4 - j][0]*pesos[1] + dados[4 - j][1]*pesos[2];
 
-float *weight(int n, float *W){
-	int i;
-	clock_t t;
-	srand(t);
-	W = malloc((n + 1)*sizeof(float));
-	for(i = 0; i <= n; i++)
-		W[i] = rand()%11/10.0;	
-	return W;
-}
+			//funcao de ativacao (degrau)
+			if(soma > 0) resposta = 1;
+			else resposta = 0;
 
-float *inputs_X(int n, float *X){
-	int i;
-	X = malloc(n*sizeof(float));
-	X[0] = -1;
-	printf("type the values of the inputs: \n");
-	for(i = 1; i <= n; i++){
-		printf("X[%d] = ", i);
-		scanf("%f", &X[i]);
+			//calcula o erro
+			erro = dados[4 - j][2] - resposta;
+
+			//atualiza os pesos
+			if(erro){
+				pesos[0] = pesos[0] + 0.5*erro*(-1);				
+				printf("erro: %d - input: %d - peso: %f\n", erro, -1, pesos[0]); 
+				pesos[0] = pesos[0] + 0.5*erro*dados[4 - j][0];
+				printf("erro: %d - input: %d - peso: %f\n", erro, dados[4 - j][0], pesos[1]); 
+				pesos[0] = pesos[0] + 0.5*erro*dados[4 - j][1];
+				printf("erro: %d - input: %d - peso: %f\n", erro, dados[4 - j][1], pesos[2]); 
+			}
+		}	
+	puts("RESULTADO DO TREINAMENTO:");		
+	printf("w[0] = %f\n", pesos[0]);
+	printf("w[1] = %f\n", pesos[1]);
+	printf("w[2] = %f\n", pesos[2]);
+
+	//resultado dos inputs
+	while(1){
+		//inputs
+		fputs("input1: ", stdout);
+		scanf("%d", &input1);
+		fputs("input2: ", stdout);
+		scanf("%d", &input2);
+
+		//resultado
+		soma = 0;
+		soma = -1*pesos[0] + input1*pesos[1] + input2*pesos[2];
+		if(soma > 0) resposta = 1;
+		else resposta = 0;
+		printf("\nRESULTADO: %d\n", resposta);
 	}
-	return X;
-}
-
-//step function
-float function(float x){
-	if(x >= 0) return 1;
-	else return 0;
-}
-
-float forward(int n, float *W, float *X){
-	int i;
-	float result = 0.0;
-	for(i = 0; i <= n; i++)
-		result = W[i]*X[i] + result;
-	result = function(result);
-	return result;
-}
-
-float get_error(float y, float x){
-	return fabs(x - y);
-}
-
-float *update_weight(int n, float step, float error, float *W, float *X){	
-	int i;
-	for(i = 0; i <= n; i++)
-		W[i] = W[i] + step*error*X[i];
-	return W;
 }
