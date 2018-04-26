@@ -12,33 +12,28 @@ int main(){
 	//treinamento
 	for(epocas; epocas--;)
 		for(j = 4; j--;){
-			printf("%d\n", epocas);
-			//soma pesos sinapticos e inputs
+			//soma pesos sinapticos e inputs(dados de treinamento)
 			soma = 0;
-			soma = 1*pesos[0] + dados[3 - j][0]*pesos[1] + dados[3 - j][1]*pesos[2];
+			soma = pesos[0] + dados[3 - j][0]*pesos[1] + dados[3 - j][1]*pesos[2];
 
-			//funcao de ativacao (degrau)
+			//funcao de ativacao(degrau)
 			if(soma > 0) resposta = 1;
 			else resposta = 0;
 
 			//calcula o erro
 			erro = dados[3 - j][2] - resposta;
 
-			//atualiza os pesos
+			//atualiza os pesos(bias and step values are equal to 1)
 			if(erro){
-				pesos[0] = pesos[0] + 1*erro*(1);				
-				printf("erro: %d - input: %d - peso: %f\n", erro, -1, pesos[0]); 
-				pesos[0] = pesos[0] + 0.5*erro*dados[3 - j][0];
-				printf("erro: %d - input: %d - peso: %f\n", erro, dados[3 - j][0], pesos[1]); 
-				pesos[0] = pesos[0] + 0.5*erro*dados[3 - j][1];
-				printf("erro: %d - input: %d - peso: %f\n", erro, dados[3 - j][1], pesos[2]); 
+				pesos[0] = pesos[0] + erro;				
+				pesos[1] = pesos[1] + erro*dados[3 - j][0];
+				pesos[2] = pesos[2] + erro*dados[3 - j][1];
 			}
 		}	
 	puts("RESULTADO DO TREINAMENTO:");		
 	printf("w[0] = %f\n", pesos[0]);
 	printf("w[1] = %f\n", pesos[1]);
 	printf("w[2] = %f\n", pesos[2]);
-
 	//resultado dos inputs
 	while(1){
 		//inputs
@@ -49,9 +44,9 @@ int main(){
 
 		//resultado
 		soma = 0;
-		soma = 1*pesos[0] + input1*pesos[1] + input2*pesos[2];
+		soma = pesos[0] + input1*pesos[1] + input2*pesos[2];
 		if(soma > 0) resposta = 1;
 		else resposta = 0;
-		printf("\nRESULTADO: %d\n", resposta);
+		printf("RESULTADO: %d\n\n", resposta);
 	}
 }
