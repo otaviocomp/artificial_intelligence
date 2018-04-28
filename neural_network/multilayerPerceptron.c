@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <math.h>
+#include <time.h>
+#include <stdlib.h>
 
-#define MAX_E 0.01
-
+#define MAX_E 0.001
+#define LEARNING_RATE 0.1
 //Bias = 1 and learning rate = 1;
 
 float sumHidden(float weight[][3], const int data[][3], int i, int j){
@@ -31,43 +33,67 @@ float errorHidden(float deltaOutput, float weightOutput[], float y){
 
 void training(float weightHidden[][3], float weightOutput[], const int data[][3], int epochs){
 	int i;
-	float h1, h2, y, e, deltaOutput, deltaHidden;
+	float h1, h2, y, error, oldError = 0, deltaOutput, deltaHidden;
 	for(epochs; epochs--;)
 		for(i = 4; i--;){
 			//feedForward
-			h1 = sigmoide(sumHidden(weightHidden, data, 0, 3 - i)); //output hidden neuron 1
-			h2 = sigmoide(sumHidden(weightHidden, data, 1, 3 - i)); //output hidden neuron 2
+			h1 = sigmoide(sumHidden(weightHidden, data, 0, i)); //output hidden neuron 1
+			h2 = sigmoide(sumHidden(weightHidden, data, 1, i)); //output hidden neuron 2
 			y = sigmoide(sumOutput(weightOutput, h1, h2)); //output neuron last layer
-			e = data[3 - i][2] - y;
-			if(e < 0) -1*e;
-			printf("erro: %f\n", e);
-			if(e > MAX_E){ //backPropagation 
+			error = data[i][2] - y;
+			error = error - oldError;
+			printf("erro data[%d]: %f\n", i, error);
+			if(error > MAX_E){ //backPropagation 
 				//output layer
-				deltaOutput = errorOutput(data[3 - i][2], y);
-				weightOutput[0] = weightOutput[0] + deltaOutput;
-				weightOutput[1] = weightOutput[1] + deltaOutput*h1;
-				weightOutput[2] = weightOutput[2] + deltaOutput*h2;
+				deltaOutput = errorOutput(data[i][2], y);
+				weightOutput[0] = weightOutput[0] + LEARNING_RATE*deltaOutput;
+				weightOutput[1] = weightOutput[1] + LEARNING_RATE*deltaOutput*h1;
+				weightOutput[2] = weightOutput[2] + LEARNING_RATE*deltaOutput*h2;
 
 				//hidden layer
 				deltaHidden = errorHidden(deltaOutput, weightOutput, y);
-				weightHidden[0][0] = weightHidden[0][0] + deltaHidden;
-				weightHidden[0][1] = weightHidden[0][1] + deltaHidden*data[3 - i][0];
-				weightHidden[0][2] = weightHidden[0][2] + deltaHidden*data[3 - i][1];
-				weightHidden[1][0] = weightHidden[1][0] + deltaHidden;
-				weightHidden[1][1] = weightHidden[1][1] + deltaHidden*data[3 - i][0];
-				weightHidden[1][2] = weightHidden[1][2] + deltaHidden*data[3 - i][1];
+				weightHidden[0][0] = weightHidden[0][0] + LEARNING_RATE*deltaHidden;
+				weightHidden[0][1] = weightHidden[0][1] + LEARNING_RATE*deltaHidden*data[i][0];
+				weightHidden[0][2] = weightHidden[0][2] + LEARNING_RATE*deltaHidden*data[i][1];
+				weightHidden[1][0] = weightHidden[1][0] + LEARNING_RATE*deltaHidden;
+				weightHidden[1][1] = weightHidden[1][1] + LEARNING_RATE*deltaHidden*data[i][0];
+				weightHidden[1][2] = weightHidden[1][2] + LEARNING_RATE*deltaHidden*data[i][1];
 			}
+			oldError = error;
 		}		
 }
 
+void weights(float weightHidden[][3], float weightOutput[]){
+	srand(time(NULL));
+	weightHidden[0][0] = rand()%11/10.0; 
+	weightHidden[0][1] = rand()%11/10.0;
+	weightHidden[0][2] = rand()%11/10.0;
+	weightHidden[1][0] = rand()%11/10.0;
+	weightHidden[1][1] = rand()%11/10.0;
+	weightHidden[1][2] = rand()%11/10.0;
+	weightOutput[0] = rand()%11/10.0;
+	weightOutput[1] = rand()%11/10.0;
+	weightOutput[2] = rand()%11/10.0;
+}
+
 int main(){
-	int epochs, input1, input2, result;
-	float h1, h2, weightHidden[2][3] = {0,0,0,0,0,0}, weightOutput[3] = {0,0,0};
+	int epochs, input1, input2;
+	float result, h1, h2, weightHidden[2][3], weightOutput[3];
 	const int data[4][3] = {{0,0,0},{1,0,1},{0,1,1},{1,1,0}};	//XOR port
+	weights(weightHidden, weightOutput);
 
 	fputs("epochs:", stdout);
 	scanf("%d", &epochs);
 	training(weightHidden, weightOutput, data, epochs);
+	printf("\nweightOutput0:%f\n", weightOutput[0]);
+	printf("weightOutputO1:%f\n", weightOutput[1]);
+	printf("weightOutputO2:%f\n", weightOutput[2]);
+	printf("weightHidden00:%f\n", weightHidden[0][0]);
+	printf("weightHidden01:%f\n", weightHidden[0][1]);
+	printf("weightHidden02:%f\n", weightHidden[0][1]);
+	printf("weightHidden10:%f\n", weightHidden[1][0]);
+	printf("weightHidden11:%f\n", weightHidden[1][1]);
+	printf("weightHidden12:%f\n", weightHidden[1][2]);
 	while(1){
 		//inputs 
 		fputs("input1: ", stdout);
@@ -77,9 +103,9 @@ int main(){
 
 		h1 = sigmoide(weightHidden[0][0] + weightHidden[0][1]*input1 + weightHidden[0][2]*input2);
 		h2 = sigmoide(weightHidden[1][0] + weightHidden[1][1]*input1 + weightHidden[1][2]*input2);
-		result = (int)sigmoide(weightOutput[0] + weightOutput[1]*h1 + weightOutput[2]*h2);
+		result = sigmoide(weightOutput[0] + weightOutput[1]*h1 + weightOutput[2]*h2);
 
 		fputs("RESULT:", stdout);
-		printf("%d\n", result);
+		printf("%f\n", result);
 	}	
 }
