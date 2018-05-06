@@ -2,7 +2,7 @@
 
 int main(){
 	float soma, pesos[3] = {0,0,0};
-	int erro, j, input1, input2, epocas, resposta;
+	int erro, i, input1, input2, epocas, resposta;
 	const int dados[4][3] = {{0,0,0},{0,1,0},{1,0,0},{1,1,1}};
 	
 	//epocas
@@ -11,23 +11,24 @@ int main(){
 
 	//treinamento
 	for(epocas; epocas--;)
-		for(j = 4; j--;){
+		for(i = 4; i--;){
 			//soma pesos sinapticos e inputs(dados de treinamento)
 			soma = 0;
-			soma = pesos[0] + dados[3 - j][0]*pesos[1] + dados[3 - j][1]*pesos[2];
+			soma = pesos[0] + dados[i][0]*pesos[1] + dados[i][1]*pesos[2];
 
 			//funcao de ativacao(degrau)
 			if(soma > 0) resposta = 1;
 			else resposta = 0;
 
 			//calcula o erro
-			erro = dados[3 - j][2] - resposta;
+			erro = dados[i][2] - resposta;
+			printf("erro data[%d]: %d\n", i, erro);
 
 			//atualiza os pesos(bias and step values are equal to 1)
 			if(erro){
 				pesos[0] = pesos[0] + erro;				
-				pesos[1] = pesos[1] + erro*dados[3 - j][0];
-				pesos[2] = pesos[2] + erro*dados[3 - j][1];
+				pesos[1] = pesos[1] + erro*dados[i][0];
+				pesos[2] = pesos[2] + erro*dados[i][1];
 			}
 		}	
 	puts("RESULTADO DO TREINAMENTO:");		
