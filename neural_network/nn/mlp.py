@@ -26,7 +26,7 @@ model.compile(loss='mean_squared_error',
 #training the neural network
 model.fit(training_data,
 		  target_data,
-		  nb_epoch=500,
+		  nb_epoch=1000,
 		  verbose=2)
 
 #plot the model of the neural network
@@ -36,4 +36,5 @@ plot_model(model,
 		   show_layer_names=True)
 
 print(model.summary())	#print the model
-print(model.predict_classes(training_data)) #print the result
+#print(model.evaluate(training_data, target_data))
+print(model.predict(training_data)) #print the result
