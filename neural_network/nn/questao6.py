@@ -1,32 +1,39 @@
+from keras.models import Sequential
+from keras.layers import Dense
+import matplotlib.pyplot as plt
+import random
 import numpy as np
 from math import sin
-from keras.models import Sequential
-from keras.layers.core import Dense
-from keras.utils.vis_utils import plot_model
+from sklearn.preprocessing import MinMaxScaler
 
 def function(n):
-	return sin(n + (sin(n))**2)
+	return sin(n + sin(n)**2)
 
-t = np.arange(100)
-x = np.zeros(100)
-for i in range(100):
+x = np.empty((10000,))
+t = np.random.uniform(0,10,10000)
+t = np.sort(t)
+
+for i in range(10000):
 	x[i] = function(t[i])
 
 model = Sequential()
-model.add(Dense(10, input_dim=1, activation='tanh'))
-model.add(Dense(1, activation='sigmoid'))
+model.add(Dense(units=10, activation='tanh', input_dim=1))
+model.add(Dense(units=10, activation='tanh'))
+model.add(Dense(units=10, activation='tanh'))
+model.add(Dense(units=1, activation='linear'))
 
-model.compile(loss='mean_squared_error',
- 			  optimizer='adam',
-			  metrics=['accuracy'])
+model.compile(loss='mse', optimizer='adam')
 
-model.fit(t, x, nb_epoch=1500, verbose=2)
+model.fit(t, x, epochs=50, steps_per_epoch=128)
 
-plot_model(model, 
-		   to_file='model_questao6.png', 
-		   show_shapes=True, 
-		   show_layer_names=True)
+val = np.array([10.05])
+print(model.predict(val))
 
-val = np.array([[100],[101],[102],[103]])
-print(model.summary())	#print the model
-print(model.predict_proba(val))
+#plot_model(model, 
+#		   to_file='model_plot.png', 
+#		   show_shapes=True, 
+#		   show_layer_names=True)
+
+plt.plot(t, x)
+plt.plot(t, model.predict(t))
+plt.show()
