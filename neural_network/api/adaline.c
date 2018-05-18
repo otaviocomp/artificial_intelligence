@@ -12,7 +12,12 @@ int step(float x){
 	return 0;
 }
 
-void 
+void training(const int epochs, const int data_size, int data){
+	int i;
+	float sum;
+	for(epochs; epochs--;)
+		for(i = 0; i < data_size; i++){
+			
 
 int main(){
 	float soma, weight[3] = {0,0,0};
