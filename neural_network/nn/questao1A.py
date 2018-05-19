@@ -2,6 +2,7 @@ import numpy as np
 from keras.models import Sequential
 from keras.layers.core import Dense
 from keras.utils.vis_utils import plot_model
+import matplotlib.pyplot as plt
 
 #XOR inputs
 training_data = np.array([[0,0,0],[1,0,0],[1,0,1],[1,1,0],
@@ -19,7 +20,7 @@ model.add(Dense(1, input_dim=3, activation='tanh'))
 #cofigure the learning process 
 model.compile(loss='mean_squared_error',
  			  optimizer='adam',
-			  metrics=['binary_accuracy'])
+			  metrics=['accuracy'])
 
 #training the neural network
 model.fit(training_data,
@@ -34,7 +35,5 @@ plot_model(model,
 		   show_layer_names=True)
 
 print(model.evaluate(training_data, target_data))
-print(model.summary())	#print the model
-print(model.summary())	#print the model
-print(model.summary())	#print the model
+print(model.get_weights())
 print(model.predict_classes(training_data)) #print the result

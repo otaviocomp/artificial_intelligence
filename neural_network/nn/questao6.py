@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import random
 import numpy as np
 from math import sin
-from sklearn.preprocessing import MinMaxScaler
 
 def function(n):
 	return sin(n + sin(n)**2)
@@ -28,11 +27,6 @@ model.fit(t, x, epochs=50, steps_per_epoch=128)
 
 val = np.array([10.05])
 print(model.predict(val))
-
-#plot_model(model, 
-#		   to_file='model_plot.png', 
-#		   show_shapes=True, 
-#		   show_layer_names=True)
 
 plt.plot(t, x)
 plt.plot(t, model.predict(t))
