@@ -58,7 +58,6 @@ assert os.path.exists(weights_path), 'Model weights not found (see "weights_path
 f = h5py.File(weights_path)
 for k in range(f.attrs['nb_layers']):
     if k >= len(model.layers):
-        # we don't look at the last (fully-connected) layers in the savefile
         break
     g = f['layer_{}'.format(k)]
     weights = [g['param_{}'.format(p)] for p in range(g.attrs['nb_params'])]
