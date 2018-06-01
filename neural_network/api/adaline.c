@@ -1,59 +1,41 @@
 #include <stdio.h>
 
-float sum(const int data[], float weight[], sizeWeight){
-	float result = weight[0];
-	for(sizeWeight; i--;)
-		result += weight[sizeWeight]*data[sizeWeight];
-	return result;
-}
-
-int step(float x){
-	if(x > 0) return 1;
-	return 0;
-}
-
-void training(const int epochs, const int data_size, int data){
-	int i;
-	float sum;
-	for(epochs; epochs--;)
-		for(i = 0; i < data_size; i++){
-			
-
 int main(){
-	float soma, weight[3] = {0,0,0};
-	int erro, i, input1, input2, epocas, result;
-	const int data[4][3] = {{0,0,0},{0,1,0},{1,0,0},{1,1,1}};
+	float sum, weights[3] = {0,0,0}, error;
+	int i, input1, input2, epochs, res;
+	const int data[4][2] = {{0,0},{0,1},{1,0},{1,1}};
+	const int results[4] = {0,0,0,1};
 	
-	//epocas
-	fputs("epocas: ", stdout);
-	scanf("%d", &epocas);
+	//epochs
+	fputs("epochs: ", stdout);
+	scanf("%d", &epochs);
 
-	//treinamento
-	for(epocas; epocas--;)
+	//training
+	for(epochs; epochs--;)
 		for(i = 4; i--;){
-			//soma weight sinapticos e inputs(data de treinamento)
-			soma = 0;
-			soma = weight[0] + data[i][0]*weight[1] + data[i][1]*weight[2];
+			//sum synaptics weights and inputs(data de treinamento)
+			sum = 0;
+			sum = weights[0] + data[i][0]*weights[1] + data[i][1]*weights[2];
 
-			//funcao de ativacao(degrau)
-			if(soma > 0) result = 1;
-			else result = 0;
+			//activation function(step function)
+			if(sum > 0) res = 1;
+			else res = 0;
 
-			//calcula o erro
-			erro = data[i][2] - result;
-			printf("erro data[%d]: %d\n", i, erro);
+			//calcula o error
+			error = results[i] - res;
+			printf("error data[%d]: %d\n", i, error);
 
-			//atualiza os weight(bias and step values are equal to 1)
-			if(erro){
-				weight[0] = weight[0] + erro;				
-				weight[1] = weight[1] + erro*data[i][0];
-				weight[2] = weight[2] + erro*data[i][1];
+			//upgrade weights(bias and step values are equal to 1)
+			if(error){
+				weights[0] += error;				
+				weights[1] += error*data[i][0];
+				weights[2] += error*data[i][1];
 			}
 		}	
 	puts("RESULTADO DO TREINAMENTO:");		
-	printf("w[0] = %f\n", weight[0]);
-	printf("w[1] = %f\n", weight[1]);
-	printf("w[2] = %f\n", weight[2]);
+	printf("w[0] = %f\n", weights[0]);
+	printf("w[1] = %f\n", weights[1]);
+	printf("w[2] = %f\n", weights[2]);
 	//resultado dos inputs
 	while(1){
 		//inputs
@@ -63,10 +45,10 @@ int main(){
 		scanf("%d", &input2);
 
 		//resultado
-		soma = 0;
-		soma = weight[0] + input1*weight[1] + input2*weight[2];
-		if(soma > 0) result = 1;
-		else result = 0;
-		printf("RESULTADO: %d\n\n", result);
+		sum = 0;
+		sum = weights[0] + input1*weights[1] + input2*weights[2];
+		if(sum > 0) res = 1;
+		else res = 0;
+		printf("RESULTADO: %d\n\n", res);
 	}
 }
